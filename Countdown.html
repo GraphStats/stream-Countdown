@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Countdown</title>
+
+  <!-- Inclure Odometer.js -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/odometer/themes/odometer-theme-minimal.css" />
+  <script src="https://cdn.jsdelivr.net/npm/odometer/odometer.min.js"></script>
+
+  <!-- Inclure la police Roboto Black -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+    }
+
+    .container {
+      margin-bottom: 40px;
+    }
+
+    .label {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .countdown {
+      display: flex;
+      gap: 10px;
+      font-size: 17em;
+    }
+
+    .odometer {
+      color: #fff;
+      text-align: center;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 1.5em;
+      border: none;
+      border-radius: 5px;
+      background-color: #1d1d1d;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #696969;
+    }
+
+    input {
+      background-color: #222;
+      color: #fff;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="label">Countdown</div>
+    <div id="countdown" class="countdown">
+      <div class="odometer" id="countdown-days">00</div> :
+      <div class="odometer" id="countdown-hours">00</div> :
+      <div class="odometer" id="countdown-minutes">00</div> :
+      <div class="odometer" id="countdown-seconds">00</div>
+    </div>
+    <div class="controls">
+      <input type="datetime-local" id="end-time" />
+      <button onclick="startCountdown()">Démarrer</button>
+      <button onclick="resetCountdown()">Réinitialiser</button>
+    </div>
+  </div>
+
+  <script>
+    let countdownInterval;
+
+    function startCountdown() {
+      const endTimeInput = document.getElementById("end-time").value;
+      if (!endTimeInput) {
+        alert("Please select a date and time.");
+        return;
+      }
+
+      const endTime = new Date(endTimeInput).getTime();
+
+      if (countdownInterval) clearInterval(countdownInterval);
+
+      countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const timeRemaining = endTime - now;
+
+        if (timeRemaining <= 0) {
+          clearInterval(countdownInterval);
+          updateCountdownDisplay(0, 0, 0, 0);
+          alert("EXPIRE!");
+        } else {
+          const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+          updateCountdownDisplay(days, hours, minutes, seconds);
+        }
+      }, 2000); 
+    }
+
+    function resetCountdown() {
+      if (countdownInterval) clearInterval(countdownInterval);
+      updateCountdownDisplay(0, 0, 0, 0);
+    }
+
+    function updateCountdownDisplay(days, hours, minutes, seconds) {
+
+      document.getElementById("countdown-days").innerText = String(days).padStart(2, "0");
+      document.getElementById("countdown-hours").innerText = String(hours).padStart(2, "0");
+      document.getElementById("countdown-minutes").innerText = String(minutes).padStart(2, "0");
+      document.getElementById("countdown-seconds").innerText = String(seconds).padStart(2, "0");
+    }
+
+
+    updateCountdownDisplay(0, 0, 0, 0);
+  </script>
+
+</body>
+</html>
