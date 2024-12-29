@@ -5,10 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Countdown</title>
 
+  <!-- Inclure Odometer.js -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/odometer/themes/odometer-theme-minimal.css" />
   <script src="https://cdn.jsdelivr.net/npm/odometer/odometer.min.js"></script>
 
+  <!-- Inclure la police Roboto Black -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
+
+  <IOdometer auto="false" class="iOdometer" :duration="300" :value="f_value" format="d" />
 
   <style>
     body {
@@ -22,6 +26,14 @@
       margin: 0;
       background-color: #000;
       color: #fff;
+    }
+
+    .odometer.odometer-animating-up .odometer-ribbon-inner, .odometer.odometer-animating-down.odometer-animating .odometer-ribbon-inner {
+    -webkit-transition-duration: 0.3s !important;
+    -moz-transition-duration: 0.3s !important;
+    -ms-transition-duration: 0.3s !important;
+    -o-transition-duration: 0.3s !important;
+    transition-duration: 0.3s !important
     }
 
     .container {
@@ -86,8 +98,8 @@
     </div>
     <div class="controls">
       <input type="datetime-local" id="end-time" />
-      <button onclick="startCountdown()">Start</button>
-      <button onclick="resetCountdown()">Re start</button>
+      <button onclick="startCountdown()">Démarrer</button>
+      <button onclick="resetCountdown()">Réinitialiser</button>
     </div>
   </div>
 
@@ -120,7 +132,7 @@
           const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
           updateCountdownDisplay(days, hours, minutes, seconds);
         }
-      }, 2000); 
+      }, 1000); 
     }
 
     function resetCountdown() {
